@@ -156,8 +156,8 @@
     <div class="container mx-auto px-4 py-8">
         <!-- Header -->
         <header class="text-center mb-12">
-            <h1 class="text-5xl font-bold text-white mb-4 drop-shadow-lg">DSA Experiments</h1>
-            <p class="text-xl text-white opacity-90">Data Structures and Algorithms - Interactive Code Viewer</p>
+            <h1 class="text-5xl font-bold text-white mb-4 drop-shadow-lg">S3 DSA Lab Experiments</h1>
+            <p class="text-xl text-white opacity-90">Data Structures and Algorithms - Lab Experiments</p>
         </header>
 
 
@@ -180,13 +180,6 @@
 
         <!-- Footer -->
         <footer class="text-center py-8 mt-12 border-t border-white border-opacity-20">
-            <div class="mb-4">
-                <a href="https://github.com/dariogeorge21"
-                   target="_blank"
-                   class="text-white text-lg font-semibold hover:text-purple-200 transition-colors duration-300">
-                    Dario George
-                </a>
-            </div>
             <div class="flex justify-center space-x-6">
                 <a href="https://github.com/dariogeorge21" target="_blank" class="text-white hover:text-purple-200 transition-colors">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -194,7 +187,14 @@
                     </svg>
                 </a>
             </div>
-            <p class="text-white text-sm mt-4 opacity-75">© 2024 DSA Experiments. All rights reserved.</p>
+            <div class="mt-4">
+                <a href="https://www.linkedin.com/in/dariogeorge21/"
+                   target="_blank"
+                   class="text-white text-lg font-semibold hover:text-purple-200 transition-colors duration-300">
+                    Dario George
+                </a>
+            </div>
+            
         </footer>
     </div>
 
@@ -203,7 +203,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="codeModalTitle" class="text-2xl font-bold">Code</h2>
-                <span class="close" onclick="closeModal('codeModal')">&times;</span>
+                <div class="flex items-center gap-3">
+                    <button onclick="copyCode()" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg transition-all duration-300 flex items-center gap-2">
+                        <svg id="copyIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                        <span id="copyText">Copy Code</span>
+                    </button>
+                    <span class="close" onclick="closeModal('codeModal')">&times;</span>
+                </div>
             </div>
             <div class="modal-body">
                 <pre class="line-numbers"><code id="codeContent" class="language-c"></code></pre>
@@ -244,7 +252,7 @@
             '8': { title: 'Binary Tree', file: '08 - Binary Tree.c' },
             '9': { title: 'Binary Search Tree', file: '09 - Binary Search Tree.c' },
             '10': { title: 'Breadth First Search', file: '10 - Breadth First Search.c' },
-            '11': { title: 'Depth First Search', file: null },
+            '11': { title: 'Not Known', file: null },
             '12': { title: 'Binary Search', file: '12 - Binary Search.c' },
             '13a': { title: 'Bubble Sort', file: '13a - Bubble Sort.c' },
             '13b': { title: 'Insertion Sort', file: '13b - Insertion Sort.c' },
@@ -316,6 +324,7 @@
                                     <div class="flex gap-2 mt-1">
                                         <button onclick="viewCode('${exp}')" class="btn text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">Code</button>
                                         <button onclick="viewOutput('${exp}')" class="btn text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Output</button>
+                                        <button onclick="copyCodeDirect('${exp}')" class="btn text-xs bg-orange-500 text-white px-2 py-1 rounded hover:bg-orange-600">Copy</button>
                                         <button onclick="downloadCode('${exp}')" class="btn text-xs bg-purple-500 text-white px-2 py-1 rounded hover:bg-purple-600">Download</button>
                                     </div>
                                 </div>
@@ -340,13 +349,16 @@
 
                     ${group.exps.length === 1 && hasCode ? `
                         <div class="flex flex-wrap gap-2">
-                            <button onclick="viewCode('${mainExp}')" class="btn flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 font-medium">
+                            <button onclick="viewCode('${mainExp}')" class="btn bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 font-medium text-sm">
                                 View Code
                             </button>
-                            <button onclick="viewOutput('${mainExp}')" class="btn flex-1 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 font-medium">
+                            <button onclick="viewOutput('${mainExp}')" class="btn bg-green-500 text-white px-3 py-2 rounded-lg hover:bg-green-600 font-medium text-sm">
                                 View Output
                             </button>
-                            <button onclick="downloadCode('${mainExp}')" class="btn flex-1 bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 font-medium">
+                            <button onclick="copyCodeDirect('${mainExp}')" class="btn bg-orange-500 text-white px-3 py-2 rounded-lg hover:bg-orange-600 font-medium text-sm">
+                                Copy Code
+                            </button>
+                            <button onclick="downloadCode('${mainExp}')" class="btn bg-purple-500 text-white px-3 py-2 rounded-lg hover:bg-purple-600 font-medium text-sm">
                                 Download
                             </button>
                         </div>
@@ -393,6 +405,89 @@
             document.getElementById('outputContent').textContent = output.output;
 
             openModal('outputModal');
+        }
+
+        // Copy code from modal
+        function copyCode() {
+            const codeContent = document.getElementById('codeContent').textContent;
+            
+            navigator.clipboard.writeText(codeContent).then(() => {
+                // Visual feedback
+                const copyIcon = document.getElementById('copyIcon');
+                const copyText = document.getElementById('copyText');
+                
+                // Change to checkmark
+                copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                copyText.textContent = 'Copied!';
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>';
+                    copyText.textContent = 'Copy Code';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy code: ', err);
+                alert('Failed to copy code to clipboard');
+            });
+        }
+
+        // Copy code directly without opening modal
+        async function copyCodeDirect(expId) {
+            const exp = experiments[expId];
+            if (!exp.file) return;
+
+            try {
+                const response = await fetch(`experiments/${exp.file}`);
+                const code = await response.text();
+                
+                await navigator.clipboard.writeText(code);
+                
+                // Create temporary toast notification
+                showToast(`Code for ${exp.title} copied to clipboard!`);
+                
+            } catch (error) {
+                console.error('Failed to copy code: ', error);
+                alert('Failed to copy code to clipboard');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            // Remove existing toast if any
+            const existingToast = document.getElementById('toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            // Create toast
+            const toast = document.createElement('div');
+            toast.id = 'toast';
+            toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full';
+            toast.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                toast.style.transform = 'translateX(full)';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
         }
 
         // Download code
