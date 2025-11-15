@@ -1,0 +1,85 @@
+{
+  "experiments": {
+    "1": {
+      "title": "Polynomials",
+      "output": "Enter number of terms in first polynomial: 3\nEnter coefficients and exponents for first polynomial:\nTerm 1 coeff and exp: 5 2\nTerm 2 coeff and exp: 4 1\nTerm 3 coeff and exp: 2 0\nEnter number of terms in second polynomial: 3\nEnter coefficients and exponents for second polynomial:\nTerm 1 coeff and exp: 3 2\nTerm 2 coeff and exp: 2 1\nTerm 3 coeff and exp: 1 0\n\nResultant Polynomial:\n8x^2 + 6x^1 + 3x^0"
+    },
+    "2": {
+      "title": "Sparse Matrix",
+      "output": "Enter number of rows and columns: 4 5\nEnter number of non-zero elements: 3\nEnter row, column and value:\n0 1 5\n1 3 8\n3 2 7\n\nSparse Matrix Representation:\nRow\tColumn\tValue\n0\t1\t5\n1\t3\t8\n3\t2\t7"
+    },
+    "3": {
+      "title": "Infix to Postfix",
+      "output": "Enter infix expression: (A+B)*C-D/E\nPostfix expression: AB+C*DE/-"
+    },
+    "4a": {
+      "title": "Linear Queue",
+      "output": "Queue Operations:\n1. Enqueue\n2. Dequeue\n3. Display\n4. Exit\n\nEnter choice: 1\nEnter element: 10\nElement enqueued successfully\n\nEnter choice: 1\nEnter element: 20\nElement enqueued successfully\n\nEnter choice: 3\nQueue: 10 20"
+    },
+    "4b": {
+      "title": "Double Ended Queue",
+      "output": "Deque Operations:\n1. Insert at front\n2. Insert at rear\n3. Delete from front\n4. Delete from rear\n5. Display\n\nEnter choice: 1\nEnter element: 10\nInserted at front\n\nEnter choice: 2\nEnter element: 20\nInserted at rear\n\nDeque: 10 20"
+    },
+    "5": {
+      "title": "Circular Queue",
+      "output": "Circular Queue Operations:\n1. Enqueue\n2. Dequeue\n3. Display\n\nEnter choice: 1\nEnter element: 15\nElement enqueued\n\nEnter choice: 1\nEnter element: 25\nElement enqueued\n\nQueue: 15 25"
+    },
+    "6": {
+      "title": "Browser Navigation",
+      "output": "Browser Navigation Simulation:\n1. Visit new page\n2. Go back\n3. Go forward\n4. Display history\n\nVisited: home.html\nVisited: about.html\nVisited: contact.html\n\nGoing back...\nCurrent page: about.html\n\nGoing forward...\nCurrent page: contact.html"
+    },
+    "7": {
+      "title": "Polynomials using Linked List",
+      "output": "Enter number of terms in polynomial 1: 3\nEnter coefficient and exponent:\n5 2\n4 1\n2 0\n\nEnter number of terms in polynomial 2: 2\nEnter coefficient and exponent:\n3 2\n1 0\n\nResultant Polynomial: 8x^2 + 4x^1 + 3x^0"
+    },
+    "8": {
+      "title": "Binary Tree",
+      "output": "Binary Tree Traversals:\nInorder: 4 2 5 1 6 3 7\nPreorder: 1 2 4 5 3 6 7\nPostorder: 4 5 2 6 7 3 1"
+    },
+    "9": {
+      "title": "Binary Search Tree",
+      "output": "BST Operations:\nInserted: 50, 30, 70, 20, 40, 60, 80\n\nInorder Traversal: 20 30 40 50 60 70 80\n\nSearch 40: Found\nSearch 90: Not Found\n\nDeleted 20\nInorder Traversal: 30 40 50 60 70 80"
+    },
+    "10": {
+      "title": "Breadth First Search",
+      "output": "Enter number of vertices: 5\nEnter adjacency matrix:\n0 1 1 0 0\n1 0 0 1 1\n1 0 0 1 0\n0 1 1 0 1\n0 1 0 1 0\n\nBFS Traversal starting from vertex 0:\n0 1 2 3 4"
+    },
+    "11": {
+      "title": "Depth First Search",
+      "output": "No code available for this experiment"
+    },
+    "12": {
+      "title": "Binary Search",
+      "output": "Enter number of elements: 7\nEnter sorted array: 10 20 30 40 50 60 70\nEnter element to search: 40\n\nElement 40 found at index 3"
+    },
+    "13a": {
+      "title": "Bubble Sort",
+      "output": "Enter number of elements: 5\nEnter elements: 64 34 25 12 22\n\nOriginal array: 64 34 25 12 22\nSorted array: 12 22 25 34 64\n\nNumber of comparisons: 10\nNumber of swaps: 8"
+    },
+    "13b": {
+      "title": "Insertion Sort",
+      "output": "Enter number of elements: 5\nEnter elements: 64 34 25 12 22\n\nOriginal array: 64 34 25 12 22\nSorted array: 12 22 25 34 64\n\nNumber of comparisons: 10"
+    },
+    "13c": {
+      "title": "Quick Sort",
+      "output": "Enter number of elements: 6\nEnter elements: 38 27 43 3 9 82\n\nOriginal array: 38 27 43 3 9 82\nSorted array: 3 9 27 38 43 82\n\nQuick Sort completed successfully"
+    },
+    "13d": {
+      "title": "Merge Sort",
+      "output": "Enter number of elements: 6\nEnter elements: 38 27 43 3 9 82\n\nOriginal array: 38 27 43 3 9 82\nSorted array: 3 9 27 38 43 82\n\nMerge Sort completed successfully"
+    },
+    "14": {
+      "title": "Memory Allocation",
+      "output": "Memory Allocation Simulation:\n1. First Fit\n2. Best Fit\n3. Worst Fit\n\nEnter number of blocks: 5\nEnter block sizes: 100 500 200 300 600\n\nEnter number of processes: 4\nEnter process sizes: 212 417 112 426\n\nFirst Fit Allocation:\nProcess 1 (212 KB) -> Block 2 (500 KB)\nProcess 2 (417 KB) -> Block 5 (600 KB)\nProcess 3 (112 KB) -> Block 1 (100 KB) - Not Allocated\nProcess 4 (426 KB) -> Not Allocated"
+    },
+    "15": {
+      "title": "Garbage Collector",
+      "output": "Garbage Collection Simulation:\nInitial Memory: 1000 KB\nAllocated: 200 KB (Object 1)\nAllocated: 300 KB (Object 2)\nAllocated: 150 KB (Object 3)\n\nFree Memory: 350 KB\n\nGarbage Collection triggered...\nFreed: Object 2 (300 KB)\n\nFree Memory after GC: 650 KB"
+    },
+    "16": {
+      "title": "Hash Table",
+      "output": "Hash Table Operations:\nInserted: (5, 'Apple')\nInserted: (15, 'Banana')\nInserted: (25, 'Cherry')\nInserted: (35, 'Date')\n\nHash Table (Size 10):\nIndex 5: 5->15->25->35\n\nSearch key 15: Found - 'Banana'\nSearch key 20: Not Found\n\nDeleted key 25\nHash Table after deletion:\nIndex 5: 5->15->35"
+    }
+  }
+}
+
