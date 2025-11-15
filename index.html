@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Experiments - Interactive Code Viewer</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .code-pattern {
+            background-image:
+                linear-gradient(135deg, #667eea 0%, #764ba2 100%),
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(255,255,255,.03) 10px,
+                    rgba(255,255,255,.03) 20px
+                );
+        }
+
+        .card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #1e1e1e;
+            margin: auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow: hidden;
+            animation: slideIn 0.3s;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 0;
+            max-height: calc(85vh - 80px);
+            overflow-y: auto;
+        }
+
+        .close {
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            line-height: 1;
+        }
+
+        .close:hover {
+            transform: scale(1.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        pre[class*="language-"] {
+            margin: 0;
+            border-radius: 0;
+        }
+
+        .output-content {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 30px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .btn {
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .no-code {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .experiment-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="code-pattern">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-white mb-4 drop-shadow-lg">DSA Experiments</h1>
+            <p class="text-xl text-white opacity-90">Data Structures and Algorithms - Interactive Code Viewer</p>
+        </header>
+
+
+        <!-- Experiments Grid -->
+        <div id="experiments-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+            <!-- Experiments will be dynamically loaded here -->
+        </div>
+
+        <!-- Source Code Link -->
+        <div class="text-center mb-8">
+            <a href="https://github.com/dariogeorge21/S3DSAlgo/tree/main/experiments"
+               target="_blank"
+               class="inline-block bg-white text-purple-700 font-semibold px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <svg class="inline-block w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0110 4.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.137 18.165 20 14.418 20 10c0-5.523-4.477-10-10-10z"/>
+                </svg>
+                View Source on GitHub
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-8 mt-12 border-t border-white border-opacity-20">
+            <div class="mb-4">
+                <a href="https://github.com/dariogeorge21"
+                   target="_blank"
+                   class="text-white text-lg font-semibold hover:text-purple-200 transition-colors duration-300">
+                    Dario George
+                </a>
+            </div>
+            <div class="flex justify-center space-x-6">
+                <a href="https://github.com/dariogeorge21" target="_blank" class="text-white hover:text-purple-200 transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                </a>
+            </div>
+            <p class="text-white text-sm mt-4 opacity-75">© 2024 DSA Experiments. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Code Modal -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="codeModalTitle" class="text-2xl font-bold">Code</h2>
+                <span class="close" onclick="closeModal('codeModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <pre class="line-numbers"><code id="codeContent" class="language-c"></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Output Modal -->
+    <div id="outputModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="outputModalTitle" class="text-2xl font-bold">Output</h2>
+                <span class="close" onclick="closeModal('outputModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="outputContent" class="output-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
+
+    <script>
+        // Experiment metadata
+        const experiments = {
+            '1': { title: 'Polynomials', file: '01 - Polynomials.c' },
+            '2': { title: 'Sparse Matrix', file: '02 - Sparse Matrix.c' },
+            '3': { title: 'Infix to Postfix', file: '03 - Infix to Postfix.c' },
+            '4a': { title: 'Linear Queue', file: '04a - Linear Queue.c' },
+            '4b': { title: 'Double Ended Queue', file: '04b - Double Ended Queue.c' },
+            '5': { title: 'Circular Queue', file: '05 - Circular Queue.c' },
+            '6': { title: 'Browser Navigation', file: '06 - Browser Navigation.c' },
+            '7': { title: 'Polynomials using Linked List', file: '07 - Polynomials using linked list.c' },
+            '8': { title: 'Binary Tree', file: '08 - Binary Tree.c' },
+            '9': { title: 'Binary Search Tree', file: '09 - Binary Search Tree.c' },
+            '10': { title: 'Breadth First Search', file: '10 - Breadth First Search.c' },
+            '11': { title: 'Depth First Search', file: null },
+            '12': { title: 'Binary Search', file: '12 - Binary Search.c' },
+            '13a': { title: 'Bubble Sort', file: '13a - Bubble Sort.c' },
+            '13b': { title: 'Insertion Sort', file: '13b - Insertion Sort.c' },
+            '13c': { title: 'Quick Sort', file: '13c - Quick Sort.c' },
+            '13d': { title: 'Merge Sort', file: '13d - Merge Sort.c' },
+            '14': { title: 'Memory Allocation', file: '14 - Memory allocation.c' },
+            '15': { title: 'Garbage Collector', file: '15 - Garbage Collector.c' },
+            '16': { title: 'Hash Table', file: '16 - Hash Table.c' }
+        };
+
+        // Group experiments by main number
+        const experimentGroups = [
+            { num: 1, exps: ['1'] },
+            { num: 2, exps: ['2'] },
+            { num: 3, exps: ['3'] },
+            { num: 4, exps: ['4a', '4b'] },
+            { num: 5, exps: ['5'] },
+            { num: 6, exps: ['6'] },
+            { num: 7, exps: ['7'] },
+            { num: 8, exps: ['8'] },
+            { num: 9, exps: ['9'] },
+            { num: 10, exps: ['10'] },
+            { num: 11, exps: ['11'] },
+            { num: 12, exps: ['12'] },
+            { num: 13, exps: ['13a', '13b', '13c', '13d'] },
+            { num: 14, exps: ['14'] },
+            { num: 15, exps: ['15'] },
+            { num: 16, exps: ['16'] }
+        ];
+
+        let outputsData = null;
+
+        // Load outputs.json
+        async function loadOutputs() {
+            try {
+                const response = await fetch('outputs.json');
+                outputsData = await response.json();
+            } catch (error) {
+                console.error('Error loading outputs:', error);
+                outputsData = { experiments: {} };
+            }
+        }
+
+        // Initialize the page
+        async function init() {
+            await loadOutputs();
+            renderExperiments();
+        }
+
+        // Render experiment cards
+        function renderExperiments() {
+            const grid = document.getElementById('experiments-grid');
+
+            experimentGroups.forEach(group => {
+                const card = document.createElement('div');
+                card.className = 'card rounded-xl shadow-lg p-6';
+
+                const hasCode = group.exps.some(exp => experiments[exp].file !== null);
+
+                let subExperimentsHTML = '';
+                if (group.exps.length > 1) {
+                    subExperimentsHTML = '<div class="mt-3 space-y-2">';
+                    group.exps.forEach(exp => {
+                        const expData = experiments[exp];
+                        if (expData.file) {
+                            subExperimentsHTML += `
+                                <div class="text-sm border-l-2 border-purple-500 pl-3">
+                                    <div class="font-medium text-gray-700">${exp.toUpperCase()}: ${expData.title}</div>
+                                    <div class="flex gap-2 mt-1">
+                                        <button onclick="viewCode('${exp}')" class="btn text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">Code</button>
+                                        <button onclick="viewOutput('${exp}')" class="btn text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Output</button>
+                                        <button onclick="downloadCode('${exp}')" class="btn text-xs bg-purple-500 text-white px-2 py-1 rounded hover:bg-purple-600">Download</button>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                    subExperimentsHTML += '</div>';
+                }
+
+                const mainExp = group.exps[0];
+                const mainExpData = experiments[mainExp];
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="text-3xl font-bold experiment-number">Exp ${group.num}</h3>
+                            <p class="text-gray-600 font-medium mt-1">${mainExpData.title}</p>
+                        </div>
+                    </div>
+
+                    ${!hasCode ? '<div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-3"><p class="text-yellow-800 text-sm font-medium">⚠️ No code available</p></div>' : ''}
+
+                    ${group.exps.length === 1 && hasCode ? `
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="viewCode('${mainExp}')" class="btn flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 font-medium">
+                                View Code
+                            </button>
+                            <button onclick="viewOutput('${mainExp}')" class="btn flex-1 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 font-medium">
+                                View Output
+                            </button>
+                            <button onclick="downloadCode('${mainExp}')" class="btn flex-1 bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 font-medium">
+                                Download
+                            </button>
+                        </div>
+                    ` : subExperimentsHTML}
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // View code in modal
+        async function viewCode(expId) {
+            const exp = experiments[expId];
+            if (!exp.file) return;
+
+            try {
+                const response = await fetch(`experiments/${exp.file}`);
+                const code = await response.text();
+
+                document.getElementById('codeModalTitle').textContent = `${expId.toUpperCase()}: ${exp.title}`;
+                document.getElementById('codeContent').textContent = code;
+
+                // Re-highlight the code
+                Prism.highlightElement(document.getElementById('codeContent'));
+
+                openModal('codeModal');
+            } catch (error) {
+                alert('Error loading code: ' + error.message);
+            }
+        }
+
+
+        // View output in modal
+        function viewOutput(expId) {
+            const exp = experiments[expId];
+            const output = outputsData?.experiments?.[expId];
+
+            if (!output) {
+                alert('Output not available for this experiment');
+                return;
+            }
+
+            document.getElementById('outputModalTitle').textContent = `${expId.toUpperCase()}: ${exp.title} - Output`;
+            document.getElementById('outputContent').textContent = output.output;
+
+            openModal('outputModal');
+        }
+
+        // Download code
+        async function downloadCode(expId) {
+            const exp = experiments[expId];
+            if (!exp.file) return;
+
+            try {
+                const response = await fetch(`experiments/${exp.file}`);
+                const code = await response.text();
+
+                const blob = new Blob([code], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = exp.file;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (error) {
+                alert('Error downloading code: ' + error.message);
+            }
+        }
+
+        // Open modal
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
